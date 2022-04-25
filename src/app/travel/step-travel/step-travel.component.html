@@ -1,0 +1,13 @@
+ <form class="form-content" [formGroup]="travelFormGroup">
+    <mat-form-field appearance="fill">
+      <mat-label>Bus</mat-label>
+      <mat-select formControlName="travelCtrl" required>
+        <mat-option *ngFor="let bus of busList" [value]="bus.id">
+          N°XX{{bus.numero}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-flat-button color="primary" matStepperNext>Choisir ces trajets</button>
+    </div>
+  </form>

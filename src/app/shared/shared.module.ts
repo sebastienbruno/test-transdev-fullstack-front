@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent, FooterComponent } from './layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 
 
@@ -18,8 +19,9 @@ import { RouterModule } from '@angular/router';
     MatToolbarModule,
     MatIconModule,
     BrowserAnimationsModule,
+    MatButtonModule,
     RouterModule
   ],
-  exports: [HeaderComponent, FooterComponent]
+  exports: [HeaderComponent, FooterComponent, MatIcon, MatButton]
 })
 export class SharedModule { }

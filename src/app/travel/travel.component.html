@@ -1,1 +1,17 @@
-<p>travel works!</p>
+<div class="sides">
+  <mat-stepper class="stepper-content" [linear]="true" labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="step1.travelFormGroup">
+      <ng-template matStepLabel>Sélectionner vos trajets</ng-template>
+      <app-step-travel #step1></app-step-travel>
+    </mat-step>
+    <mat-step [stepControl]="step2.paiementFormGroup" >
+      <ng-template matStepLabel>Effectuer votre paiement</ng-template>
+      <app-step-paiement #step2></app-step-paiement>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Confirmation de votre réservation</ng-template>
+      <app-step-confirmation #step3 (reset)="stepper.reset()"></app-step-confirmation>
+    </mat-step>
+  </mat-stepper>
+  <app-basket class="basket-content"></app-basket>
+</div>

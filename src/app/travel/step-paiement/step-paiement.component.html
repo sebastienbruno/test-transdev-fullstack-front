@@ -1,0 +1,14 @@
+<div class="step-paiement-content">
+  <form [formGroup]="paiementFormGroup">
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="paiementCtrl" placeholder="Ex. 1 Main St, New York, NY"
+              required>
+      </mat-form-field>
+      <div class="button-item">
+        <button mat-flat-button color="primary"  matStepperPrevious>Back</button>
+        <button mat-flat-button color="primary"  matStepperNext>Next</button>
+      </div>
+  </form>
+  <app-basket class="basket-content"></app-basket>
+</div>
