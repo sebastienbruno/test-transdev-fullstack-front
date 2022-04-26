@@ -1,3 +1,11 @@
 .mat-button-base {
     margin: 10px 10px 10px 0;
 }
+
+.form-paiement {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    gap: 15px;
+}

@@ -1,10 +1,38 @@
 <div class="step-paiement-content">
-  <form [formGroup]="paiementFormGroup">
+  <form [formGroup]="paiementFormGroup" class="form-paiement">
+    <mat-radio-group
+      aria-labelledby="type-moyen-paiement-radio-group-label"
+      [(ngModel)]="moyenPaiement"
+      [ngModelOptions]="{standalone: true}"
+      (change)="onChangeTypeMoyenPaiement()">
+      <mat-radio-button class="example-radio-button" *ngFor="let option of options" [value]="option.name">
+        {{option.libelle}} - {{ option.name }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <ng-container *ngIf="moyenPaiement === 'CARTE_BANCAIRE'">
       <mat-form-field appearance="fill">
-        <mat-label>Address</mat-label>
-        <input matInput formControlName="paiementCtrl" placeholder="Ex. 1 Main St, New York, NY"
+        <mat-label>Numéro de carte bancaire</mat-label>
+        <input matInput placeholder="Ex. monadresse@email.fr"
               required>
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Date d'expiration</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>      
+    </ng-container>
+  <ng-container *ngIf="moyenPaiement === 'PAYPAL'">
+    <mat-form-field appearance="fill">
+      <mat-label>Adresse e-mail</mat-label>
+      <input type="email" matInput placeholder="Ex. monadresse@email.fr">
+    </mat-form-field>
+</ng-container>
+    <ng-container *ngIf="moyenPaiement === 'CARTE_BANCAIRE'">
+      <span> {{moyenPaiement}}</span>
+  </ng-container>
+
       <div class="button-item">
         <button mat-flat-button color="primary"  matStepperPrevious>Back</button>
         <button mat-flat-button color="primary"  matStepperNext>Next</button>

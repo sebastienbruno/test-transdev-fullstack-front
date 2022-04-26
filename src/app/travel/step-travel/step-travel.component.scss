@@ -5,12 +5,22 @@
 
 .basket-content {
     background-color: #EBEBEB;
-    width:20%;
 }
 
 .form-content {
     flex-grow: 4;
-    width:78%;
     align-content: center;
     
+}
+
+.prix-barre {
+    text-decoration: line-through;
+}
+
+.prix {
+    text-align: center;
+}
+
+.prix-remise {
+    background-color: wheat;
 }

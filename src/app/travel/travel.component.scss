@@ -14,6 +14,7 @@
     display: flex;
     justify-content: space-between ;
     gap: 10px;
+    min-height: 600px;
 }
 
 .basket-content {
@@ -21,12 +22,11 @@
     margin-bottom: 10px;
     margin-right: 8px;
     background-color: #EBEBEB;
-    width:20%;
+    width:40%;
 }
 
 .stepper-content {
     flex-grow: 4;
-    width:78%;
-    align-content: center;
-    
+    width:60%;
+    align-content: center;   
 }
