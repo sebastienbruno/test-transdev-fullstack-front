@@ -20,7 +20,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr [ngClass]="trajet.estRemise ? 'table-warning' : ''" *ngFor="let trajet of trajets; index as i">
+      <tr [ngClass]="trajet.estRemise ? '' : 'table-warning'" *ngFor="let trajet of trajets; index as i">
         <th scope="row">{{ trajet.dateDepart | date:'dd/MM/YYYY' }}</th>
         <td>{{ trajet.dateDepart | date:'hh:mm' }}</td>
         <td class="prix">{{ trajet.nbrPlaceRestante | number }}</td>

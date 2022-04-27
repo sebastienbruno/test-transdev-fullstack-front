@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+
+import { PAIEMENT_PAYPAL, PAIEMENT_CARTE_BANCAIRE, PATTERN_CARTE_BANCAIRE } from '../../core/constants';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
-const moment = _moment;
+import { Subscription } from 'rxjs';
 
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -25,30 +24,70 @@ export const MY_FORMATS = {
   templateUrl: './step-paiement.component.html',
   styleUrls: ['./step-paiement.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ],})
-export class StepPaiementComponent implements OnInit {
+export class StepPaiementComponent implements OnInit, OnDestroy {
 
+  subscriptions: Subscription = new Subscription();
+
+  PAYPAL = PAIEMENT_PAYPAL;
+  CARTE_BANCAIRE = 'CARTE_BANCAIRE';
   paiementFormGroup: FormGroup;
   moyenPaiement: string;
   options: {name:string; libelle:string}[] = [
-    {name:"CARTE_BANCAIRE", libelle: "Carte bancaire"},
-    {name:"PAYPAL", libelle: "Paypal"}]
+    {name:this.CARTE_BANCAIRE, libelle: "Carte bancaire"},
+    {name:this.PAYPAL, libelle: "Paypal"}]
+
+  errors: string[];
   
   constructor(private _formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.paiementFormGroup = this._formBuilder.group({
-      //paiementCtrl: ['', Validators.required],
-      //emailFormControl: ['', Validators.required, Validators.email]
+      typeMoyenPaiement: ['', Validators.required],
+      numeroCarte: [''],
+      dateExpiration: [''],
+      email: ['']
     });
+
+    this.subscriptions.add(this.paiementFormGroup.get('typeMoyenPaiement')?.valueChanges.subscribe(value => {
+      console.log('On change', value);
+      if (value === PAIEMENT_CARTE_BANCAIRE) {
+        this.paiementFormGroup.get('numeroCarte')?.setValidators([
+          Validators.pattern(PATTERN_CARTE_BANCAIRE),
+          Validators.required]);
+        this.paiementFormGroup.get('dateExpiration')?.setValidators(Validators.required);
+        this.paiementFormGroup.get('email')?.clearValidators();
+      } else if (value === PAIEMENT_PAYPAL) {
+        this.paiementFormGroup.get('numeroCarte')?.clearValidators();
+        this.paiementFormGroup.get('dateExpiration')?.clearValidators();
+        this.paiementFormGroup.get('email')?.setValidators([Validators.email, Validators.required]);
+      }
+      this.paiementFormGroup.get('numeroCarte')?.updateValueAndValidity();
+      this.paiementFormGroup.get('dateExpiration')?.updateValueAndValidity();
+      this.paiementFormGroup.get('email')?.updateValueAndValidity();
+      this.errors = [];
+    }));
   }
-  
-  onChangeTypeMoyenPaiement(){
-    console.log('onChangeTypeMoyentPaiement');
+
+  ngOnDestroy(): void {
+      this.subscriptions.unsubscribe();
   }
+
+  onSubmit(){
+    console.log(this.paiementFormGroup.status);
+    console.log(this.paiementFormGroup);
+    if (this.paiementFormGroup?.controls['typeMoyenPaiement'].status === 'INVALID') {
+      console.log('error');
+      this.errors = ["La sélection d'un moyen de paiement est obligatoire"]
+    }
+    else {
+      console.log("Paiement en cours");
+      console.log(this.paiementFormGroup.value);
+      console.log("Paiement accepté");
+    }
+  }
+
+
 }

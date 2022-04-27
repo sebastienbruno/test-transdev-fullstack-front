@@ -1,42 +1,65 @@
 <div class="step-paiement-content">
   <form [formGroup]="paiementFormGroup" class="form-paiement">
-    <mat-radio-group
-      aria-labelledby="type-moyen-paiement-radio-group-label"
-      [(ngModel)]="moyenPaiement"
-      [ngModelOptions]="{standalone: true}"
-      (change)="onChangeTypeMoyenPaiement()">
-      <mat-radio-button class="example-radio-button" *ngFor="let option of options" [value]="option.name">
-        {{option.libelle}} - {{ option.name }}
+    <div *ngIf="errors && errors.length > 0" class="alert alert-danger">
+      <p *ngFor="let error of errors">{{ error }}</p>
+    </div>
+  <mat-radio-group formControlName="typeMoyenPaiement" 
+      aria-labelledby="type-moyen-paiement-radio-group-label">
+      <mat-radio-button class="radio-button" *ngFor="let option of options" [value]="option.name">
+        {{option.libelle}}
       </mat-radio-button>
     </mat-radio-group>
-    <ng-container *ngIf="moyenPaiement === 'CARTE_BANCAIRE'">
+    <ng-container *ngIf="paiementFormGroup.value.typeMoyenPaiement === CARTE_BANCAIRE">
       <mat-form-field appearance="fill">
         <mat-label>Numéro de carte bancaire</mat-label>
-        <input matInput placeholder="Ex. monadresse@email.fr"
-              required>
+        <input formControlName="numeroCarte" matInput placeholder="Ex. 4719XXXXXXXX">
       </mat-form-field>
-      <mat-form-field appearance="fill">
+      <ng-container *ngFor="let formControl of [paiementFormGroup.controls['numeroCarte']]">
+        <div *ngIf="formControl.invalid && (formControl.dirty || formControl.touched)" class="alert alert-danger">
+          <div *ngIf="formControl.errors?.['required']">
+            Le numéro de carte bancaire est obligatoire.
+          </div>
+          <div *ngIf="formControl.errors?.['pattern']">
+            Le numéro de carte bancaire n'est pas au bon format.
+          </div>
+        </div>
+      </ng-container>
+        <mat-form-field appearance="fill">
         <mat-label>Date d'expiration</mat-label>
-        <input matInput [matDatepicker]="picker">
+        <input formControlName="dateExpiration" matInput [matDatepicker]="picker">
         <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>      
-    </ng-container>
-  <ng-container *ngIf="moyenPaiement === 'PAYPAL'">
+      <ng-container *ngFor="let formControl of [paiementFormGroup.controls['dateExpiration']]">
+        <div *ngIf="formControl.invalid && (formControl.dirty || formControl.touched)" class="alert alert-danger">
+          <div *ngIf="formControl.errors?.['required']">
+            La sélection d'une date d'expiration est obligatoire.
+          </div>
+        </div>
+      </ng-container>
+      </ng-container>
+  <ng-container *ngIf="paiementFormGroup.value.typeMoyenPaiement === PAYPAL">
     <mat-form-field appearance="fill">
       <mat-label>Adresse e-mail</mat-label>
-      <input type="email" matInput placeholder="Ex. monadresse@email.fr">
+      <input type="email" formControlName="email" matInput placeholder="Ex. monadresse@email.fr">
     </mat-form-field>
+    <ng-container *ngFor="let formControl of [paiementFormGroup.controls['email']]">
+      <div *ngIf="formControl.invalid && (formControl.dirty || formControl.touched)" class="alert alert-danger">
+        <div *ngIf="formControl.errors?.['required']">
+          L'email est obligatoire.
+        </div>
+        <div *ngIf="formControl.errors?.['email']">
+          L'email n'est pas au bon format.
+        </div>
+      </div>
+    </ng-container>
+
 </ng-container>
-    <ng-container *ngIf="moyenPaiement === 'CARTE_BANCAIRE'">
-      <span> {{moyenPaiement}}</span>
-  </ng-container>
 
       <div class="button-item">
-        <button mat-flat-button color="primary"  matStepperPrevious>Back</button>
-        <button mat-flat-button color="primary"  matStepperNext>Next</button>
+        <button mat-flat-button color="primary"  matStepperPrevious (click)="paiementFormGroup.reset({})">Compléter mon panier</button>
+        <button mat-flat-button color="primary" type="submit" matStepperNext (click)="onSubmit()">Payer</button>
       </div>
   </form>
-  <app-basket class="basket-content"></app-basket>
 </div>
