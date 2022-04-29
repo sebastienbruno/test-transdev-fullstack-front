@@ -1,47 +1,51 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { List } from 'immutable';
+import { Subscription } from 'rxjs';
+import { Trajet } from 'src/app/core/models';
+import { Bus } from 'src/app/core/models/bus.model';
+import { TrajetService } from 'src/app/core/services';
+import { PanierService } from 'src/app/core/services/panier.service';
 
 @Component({
   selector: 'app-step-travel',
   templateUrl: './step-travel.component.html',
-  styleUrls: ['./step-travel.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./step-travel.component.scss']
 })
-export class StepTravelComponent implements OnInit {
+export class StepTravelComponent implements OnInit, OnDestroy {
 
-  busList: {id:number; numero:number}[] = [
-    {id: 1, numero:1},
-    {id: 2, numero:2},
-    {id: 3, numero:3},
-    {id: 4, numero:4},
-  ];
+  busList: List<Bus>;
+  trajets: List<Trajet>;  
 
-  //A mettre dans modele
-  trajets: {trajetId: number; dateDepart: number; nbrPlace: number; nbrPlaceRestante: number; prix:number; estRemise: boolean; prixRemise?: number}[] = [
-    {trajetId: 1, dateDepart: Date.now(), nbrPlace: 10, nbrPlaceRestante: 8, prix:16, estRemise: false},
-    {trajetId: 2, dateDepart: Date.now(), nbrPlace: 10, nbrPlaceRestante: 8, prix:16, estRemise: false},
-    {trajetId: 3, dateDepart: Date.now(), nbrPlace: 10, nbrPlaceRestante: 8, prix:200, estRemise: true, prixRemise: 190 },
-    {trajetId: 5, dateDepart: Date.now(), nbrPlace: 10, nbrPlaceRestante: 8, prix:16, estRemise: false},
-    {trajetId: 6, dateDepart: Date.now(), nbrPlace: 10, nbrPlaceRestante: 8, prix:150, estRemise: true, prixRemise:142.5},
-  ]
-  
   travelFormGroup: FormGroup;
-  panierVide$: Observable<boolean>;
-  _panierVideSubject:Subject<boolean> = new BehaviorSubject<boolean>(true);
+  disableValiderPanierButton: boolean;
+  subscriptions = new Subscription();
 
-  constructor(private _formBuilder: FormBuilder) { }
+  constructor(private _formBuilder: FormBuilder,
+    private panierService: PanierService,
+    private trajetService: TrajetService) { }
 
   ngOnInit(): void {
     this.travelFormGroup = this._formBuilder.group({
       travelCtrl: ['', ]
     })
-    this.panierVide$ = this._panierVideSubject.asObservable();
+    this.subscriptions.add(this.panierService.itemsPanier$.subscribe(items => {
+      this.disableValiderPanierButton = items.isEmpty();
+    }));
+    this.subscriptions.add(this.trajetService.getAllBus().subscribe(busList => this.busList = busList));
   }
 
-  public onAddTrajet(trajetId: number) {
-    console.log("Ajout du trajet", trajetId);
-    this._panierVideSubject.next(false);
+  public onAddTrajet(trajet: Trajet) {
+    this.panierService.addTrajet(trajet);
   }
 
+  public onChangeBusSelection(busId: number): void {
+    console.log("budId change : ", busId);
+    this.subscriptions.add(this.trajetService.getAllByBusId(busId).subscribe(
+      (trajets: List<Trajet>) => this.trajets = trajets));
+  }
+
+  ngOnDestroy(): void {
+      this.subscriptions.unsubscribe();
+  }
 }

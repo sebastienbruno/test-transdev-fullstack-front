@@ -1,0 +1,26 @@
+<div class="container-panier">
+    <h2>Mon panier</h2>
+    <div class="card text-white bg-secondary mb-3" *ngFor="let item of items$ | async">
+        <div class="card-body">
+            <h4 class="card-title">Bus n°{{item.trajet.bus.numero}} - Trajet le {{item.trajet.dateDepart | date:'dd/MM/YYYY' }} à {{item.trajet.dateDepart | date:'hh:mm' }} </h4>
+            <div class="card-text">
+                <div class="sub-card-text">
+                    <div>
+                        <span>Nombre de places à réserver</span>
+                        <button mat-icon-button (click)="onDeleteItem(item.trajet)">
+                            <mat-icon>remove_circle</mat-icon>
+                        </button>
+                        <span>{{ item.quantite }}</span>
+                        <button mat-icon-button (click)="onAddItem(item.trajet)">
+                            <mat-icon>add_circle</mat-icon>
+                        </button>
+                    </div>
+                    <div>{{ item.prixTotal | currency : 'EUR' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="total">
+        <strong>Prix total de mon panier : € {{ items | prixTotalPanier }}</strong>
+    </div>
+</div>

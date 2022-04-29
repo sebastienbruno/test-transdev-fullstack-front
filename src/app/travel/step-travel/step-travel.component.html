@@ -1,42 +1,45 @@
- <form class="form-content" [formGroup]="travelFormGroup">
-    <mat-form-field appearance="fill">
-      <mat-label>Bus</mat-label>
-      <mat-select formControlName="travelCtrl">
-        <mat-option *ngFor="let bus of busList" [value]="bus.id">
-          N°XX{{bus.numero}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-
-    <table class="table table-danger table-striped">
-      <thead>
-      <tr>
-        <th scope="col">Date de départ</th>
-        <th scope="col">Heure de départ</th>
-        <th scope="col">Places restantes</th>
-        <th scope="col">Prix</th>
-        <th scope="col"></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr [ngClass]="trajet.estRemise ? '' : 'table-warning'" *ngFor="let trajet of trajets; index as i">
-        <th scope="row">{{ trajet.dateDepart | date:'dd/MM/YYYY' }}</th>
-        <td>{{ trajet.dateDepart | date:'hh:mm' }}</td>
-        <td class="prix">{{ trajet.nbrPlaceRestante | number }}</td>
-        <td class="center">
-          <p [ngClass]="trajet.estRemise ? 'prix-barre' : ''">
-            {{ trajet.prix | currency : 'EUR' }}
-          </p>
-          <p *ngIf="trajet.estRemise" class="prix prix-remise"> - {{ trajet.prixRemise | currency : 'EUR' }} </p>
-        </td>
-        <td><button mat-raised-button color="primary" (click)="onAddTrajet(trajet.trajetId)">
-          <mat-icon>add</mat-icon>
-        </button></td>
-      </tr>
-      </tbody>
-    </table>
-    <div class="d-flex justify-content-end">
-      <button mat-flat-button [disabled]="panierVide$ | async" color="primary" matStepperNext>Valider mon panier</button>
+<form class="step-travel-content" [formGroup]="travelFormGroup">
+    <div class="main-content">
+      <div class="left-part">
+        <mat-form-field class="form-field-bus" appearance="fill">
+          <mat-label>Bus</mat-label>
+          <mat-select (valueChange)="onChangeBusSelection($event)" formControlName="travelCtrl">
+            <mat-option *ngFor="let bus of busList" [value]="bus.busId">
+              N° {{bus.numero}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <table class="table-trajet table table-danger table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Date de départ</th>
+            <th scope="col">Heure de départ</th>
+            <th scope="col">Places restantes</th>
+            <th scope="col">Prix</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr [ngClass]="trajet.estRemise ? '' : 'table-warning'" *ngFor="let trajet of trajets; index as i">
+            <th scope="row">{{ trajet.dateDepart | date:'dd/MM/YYYY' }}</th>
+            <td>{{ trajet.dateDepart | date:'hh:mm' }}</td>
+            <td class="prix">{{ trajet.nbrPlaceRestante | number }}</td>
+            <td class="center">
+              <p [ngClass]="trajet.estRemise ? 'prix-barre' : ''">
+                {{ trajet.prix | currency : 'EUR' }}
+              </p>
+              <p *ngIf="trajet.estRemise" class="prix prix-remise"> - {{ trajet.prixRemise | currency : 'EUR' }} </p>
+            </td>
+            <td><button mat-raised-button color="primary" (click)="onAddTrajet(trajet)">
+              <mat-icon>add</mat-icon>
+            </button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <app-panier class="basket-content"></app-panier>
+    </div>
+    <div class="global-button">
+      <button mat-flat-button [disabled]="disableValiderPanierButton" color="primary" matStepperNext>Valider mon panier</button>
     </div>
   </form>

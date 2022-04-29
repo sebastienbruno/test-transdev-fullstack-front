@@ -6,13 +6,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatButton, MatButtonModule } from '@angular/material/button';
-
-
+import { PrixTotalPanierPipe } from './pipes';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PrixTotalPanierPipe
   ],
   imports: [
     CommonModule,
@@ -22,6 +22,6 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     RouterModule
   ],
-  exports: [HeaderComponent, FooterComponent, MatIcon, MatButton]
+  exports: [HeaderComponent, FooterComponent, MatIcon, MatButton, PrixTotalPanierPipe]
 })
 export class SharedModule { }

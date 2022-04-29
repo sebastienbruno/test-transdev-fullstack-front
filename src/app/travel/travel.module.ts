@@ -12,10 +12,12 @@ import { StepTravelComponent } from './step-travel/step-travel.component';
 import { StepPaiementComponent } from './step-paiement/step-paiement.component';
 import { StepConfirmationComponent } from './step-confirmation/step-confirmation.component';
 import { RouterModule } from '@angular/router';
-import { BasketComponent } from './basket/basket.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { PanierComponent } from './panier/panier.component';
+import { CoreModule } from '../core/core.module';
+import { PanierService } from '../core/services/panier.service';
 
 
 @NgModule({
@@ -24,10 +26,11 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     StepTravelComponent,
     StepPaiementComponent,
     StepConfirmationComponent,
-    BasketComponent
+    PanierComponent
   ],
   imports: [
     CommonModule,
+    CoreModule,
     ReactiveFormsModule,
     FormsModule,
     MatStepperModule,
@@ -43,6 +46,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
   ],
   exports: [
     TravelComponent
-  ]
+  ],
+  providers: [PanierService]
 })
 export class TravelModule { }

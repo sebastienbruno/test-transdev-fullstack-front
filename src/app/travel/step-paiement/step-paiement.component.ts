@@ -1,7 +1,7 @@
 
 import { PAIEMENT_PAYPAL, PAIEMENT_CARTE_BANCAIRE, PATTERN_CARTE_BANCAIRE } from '../../core/constants';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
