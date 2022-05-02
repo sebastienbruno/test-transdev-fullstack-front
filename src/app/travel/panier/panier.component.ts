@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { List } from 'immutable';
 import { Observable } from 'rxjs';
-import { ItemPanier, Trajet } from 'src/app/core/models';
-import { TrajetService } from 'src/app/core/services';
-import { PanierService } from 'src/app/core/services/panier.service';
+import { ItemPanier, Trajet } from '../../core/models';
+import { PanierService } from '../../core/services/panier.service';
 
 @Component({
   selector: 'app-panier',

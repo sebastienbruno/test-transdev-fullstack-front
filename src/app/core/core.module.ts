@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrajetService } from './services';
+import { PanierService, TrajetService, ApiService } from './services';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule, 
+    HttpClientModule
   ],
-  providers: [TrajetService]})
+  providers: [ApiService]})
 export class CoreModule { }

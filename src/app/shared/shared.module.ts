@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { HeaderComponent, FooterComponent } from './layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,12 +7,14 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { PrixTotalPanierPipe } from './pipes';
+import { ListErrosComponent } from './list-erros/list-erros.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    PrixTotalPanierPipe
+    PrixTotalPanierPipe,
+    ListErrosComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +24,7 @@ import { PrixTotalPanierPipe } from './pipes';
     MatButtonModule,
     RouterModule
   ],
-  exports: [HeaderComponent, FooterComponent, MatIcon, MatButton, PrixTotalPanierPipe]
+  exports: [HeaderComponent, FooterComponent, MatIcon, MatButton, PrixTotalPanierPipe],
+  providers: [CurrencyPipe]
 })
 export class SharedModule { }

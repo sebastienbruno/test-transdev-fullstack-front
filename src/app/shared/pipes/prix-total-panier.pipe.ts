@@ -1,14 +1,19 @@
+import { CurrencyPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import { List } from 'immutable';
-import { ItemPanier } from 'src/app/core/models';
+import { ItemPanier } from '../../core/models';
 
 @Pipe({
   name: 'prixTotalPanier'
 })
 export class PrixTotalPanierPipe implements PipeTransform {
 
+  constructor(private currencyPipe: CurrencyPipe) {}
+
   transform(items: List<ItemPanier>, ...args: unknown[]): unknown {
-    return items.reduce((total:number, item) => total + item.prixTotal, 0);
+    return  this.currencyPipe.transform(
+      items.reduce((total:number, item) => total + item.prixTotal, 0),
+      'EUR');
   }
 
 }

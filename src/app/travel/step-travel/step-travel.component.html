@@ -4,8 +4,8 @@
         <mat-form-field class="form-field-bus" appearance="fill">
           <mat-label>Bus</mat-label>
           <mat-select (valueChange)="onChangeBusSelection($event)" formControlName="travelCtrl">
-            <mat-option *ngFor="let bus of busList" [value]="bus.busId">
-              N° {{bus.numero}}
+            <mat-option *ngFor="let bus of busList" [value]="bus.numeroBus">
+              N° {{bus.numeroBus}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -28,7 +28,7 @@
               <p [ngClass]="trajet.estRemise ? 'prix-barre' : ''">
                 {{ trajet.prix | currency : 'EUR' }}
               </p>
-              <p *ngIf="trajet.estRemise" class="prix prix-remise"> - {{ trajet.prixRemise | currency : 'EUR' }} </p>
+              <p *ngIf="trajet.estRemise" class="prix prix-remise">{{ trajet.prixRemise | currency : 'EUR' }} </p>
             </td>
             <td><button mat-raised-button color="primary" (click)="onAddTrajet(trajet)">
               <mat-icon>add</mat-icon>
