@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { StepTravelComponent } from './step-travel/step-travel.component';
 import { StepPaiementComponent } from './step-paiement/step-paiement.component';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-travel',
@@ -9,14 +10,16 @@ import { StepPaiementComponent } from './step-paiement/step-paiement.component';
 })
 export class TravelComponent {
 
+  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+
   @ViewChild(StepTravelComponent) stepTravelComponent: StepTravelComponent;
   @ViewChild(StepPaiementComponent) stepPaiementComponent: StepPaiementComponent;
 
   
   constructor() { } 
 
-  get frmStepOne() {
-    return this.stepTravelComponent ? this.stepTravelComponent.travelFormGroup : null;
- }
+  goToStepPaiement(){
+    this.stepper.next();
+  }
 
 }

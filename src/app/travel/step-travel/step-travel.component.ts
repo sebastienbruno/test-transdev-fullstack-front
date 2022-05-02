@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { List } from 'immutable';
 import { Subscription } from 'rxjs';
-import { Trajet, Bus } from '../../core/models';
-import { TrajetService, PanierService } from '../../core/services';
+import { Trajet, Bus, Reservation } from '../../core/models';
+import { TrajetService, PanierService, ReservationService } from '../../core/services';
 
 @Component({
   selector: 'app-step-travel',
@@ -13,19 +13,23 @@ import { TrajetService, PanierService } from '../../core/services';
 export class StepTravelComponent implements OnInit, OnDestroy {
 
   busList: List<Bus>;
-  trajets: List<Trajet>;  
+  trajets: List<Trajet>;
 
   travelFormGroup: FormGroup;
   disableValiderPanierButton: boolean;
   subscriptions = new Subscription();
 
+  @Output()
+  onNextStep = new EventEmitter();
+
   constructor(private _formBuilder: FormBuilder,
     private panierService: PanierService,
-    private trajetService: TrajetService) { }
+    private trajetService: TrajetService,
+    private reservationService: ReservationService) { }
 
   ngOnInit(): void {
     this.travelFormGroup = this._formBuilder.group({
-      travelCtrl: ['', ]
+      travelCtrl: ['',]
     })
     this.subscriptions.add(this.panierService.itemsPanier$.subscribe(items => {
       this.disableValiderPanierButton = items.isEmpty();
@@ -46,7 +50,16 @@ export class StepTravelComponent implements OnInit, OnDestroy {
       }));
   }
 
+  public onValidate(): void {
+    this.reservationService.create().subscribe(
+      (reservation: Reservation) => {
+        console.log("reservation confirmée", reservation.reservationId);
+        this.onNextStep.emit(reservation.reservationId);
+      }
+    );    
+  }
+
   ngOnDestroy(): void {
-      this.subscriptions.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }

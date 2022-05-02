@@ -40,6 +40,7 @@
       <app-panier class="basket-content"></app-panier>
     </div>
     <div class="global-button">
-      <button mat-flat-button [disabled]="disableValiderPanierButton" color="primary" matStepperNext>Valider mon panier</button>
+      <button mat-flat-button [disabled]="disableValiderPanierButton" color="primary" 
+        (click)="onValidate()">Valider mon panier</button>
     </div>
   </form>

@@ -32,5 +32,4 @@ export class PanierComponent implements OnInit {
   onAddItem(trajet: Trajet): void {
     this.panierService.addTrajet(trajet);
   }
-
 }

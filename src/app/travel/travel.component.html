@@ -2,7 +2,7 @@
   <mat-stepper class="stepper-content" [linear]="true" labelPosition="bottom" #stepper>
     <mat-step [stepControl]="step1.travelFormGroup">
       <ng-template matStepLabel>Sélectionner mes trajets</ng-template>
-      <app-step-travel #step1></app-step-travel>
+      <app-step-travel (onNextStep)="goToStepPaiement()" #step1></app-step-travel>
     </mat-step>
     <mat-step [stepControl]="step2.paiementFormGroup" >
       <ng-template matStepLabel>Effectuer mon paiement</ng-template>
