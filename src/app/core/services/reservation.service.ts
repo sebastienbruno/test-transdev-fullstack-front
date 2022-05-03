@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { List } from 'immutable';
 import { Observable, switchMap, take } from 'rxjs';
-import { CreateReservation, ItemPanier, Reservation } from '../models';
+import { CreateReservation, Reservation } from '../models';
 import { BilletDto } from '../models/billet-dto.model';
 import { ApiService } from './api.service';
 import { PanierService } from './panier.service';
