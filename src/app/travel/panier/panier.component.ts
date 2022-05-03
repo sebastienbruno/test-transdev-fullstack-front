@@ -21,7 +21,6 @@ export class PanierComponent implements OnInit {
     this.items$.subscribe(
       (tickets) => {
         this.items = tickets;
-        console.log(this.items);
       })
   }
 

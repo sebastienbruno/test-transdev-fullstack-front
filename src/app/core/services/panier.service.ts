@@ -47,4 +47,8 @@ export class PanierService {
       }
     }
   }
+
+  reset(){
+    this._itemsPanierSubject.next(List());
+  }
 }

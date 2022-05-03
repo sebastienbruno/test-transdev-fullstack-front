@@ -3,7 +3,7 @@
       <div class="left-part">
         <mat-form-field class="form-field-bus" appearance="fill">
           <mat-label>Bus</mat-label>
-          <mat-select (valueChange)="onChangeBusSelection($event)" formControlName="travelCtrl">
+          <mat-select (valueChange)="onChangeBusSelection($event)">
             <mat-option *ngFor="let bus of busList" [value]="bus.numeroBus">
               N° {{bus.numeroBus}}
             </mat-option>
@@ -14,7 +14,7 @@
           <tr>
             <th scope="col">Date de départ</th>
             <th scope="col">Heure de départ</th>
-            <th scope="col">Places restantes</th>
+            <th scope="col">Nombre de places</th>
             <th scope="col">Prix</th>
             <th scope="col"></th>
           </tr>
@@ -23,7 +23,7 @@
           <tr [ngClass]="trajet.estRemise ? '' : 'table-warning'" *ngFor="let trajet of trajets; index as i">
             <th scope="row">{{ trajet.dateDepart | date:'dd/MM/YYYY' }}</th>
             <td>{{ trajet.dateDepart | date:'hh:mm' }}</td>
-            <td class="prix">{{ trajet.nbrPlaceRestante | number }}</td>
+            <td class="prix">{{ trajet.nbrPlace | number }}</td>
             <td class="center">
               <p [ngClass]="trajet.estRemise ? 'prix-barre' : ''">
                 {{ trajet.prix | currency : 'EUR' }}

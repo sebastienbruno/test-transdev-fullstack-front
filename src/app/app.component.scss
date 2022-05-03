@@ -6,6 +6,10 @@
     align-items: stretch;
 }
 
+.error-snackbar{
+  background-color: lightcoral;
+  color: white;
+}
 
 @media all and (max-width: 600px) {
     .main-content {

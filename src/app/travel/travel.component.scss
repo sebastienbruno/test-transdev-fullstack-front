@@ -10,14 +10,18 @@
 }
 
 .sides {
+    padding-right: 5px;
     display: flex;
     justify-content: space-between ;
-    gap: 10px;
     min-height: 600px;
 }
 
 .stepper-content {
     flex-grow: 4;
     width:60%;
-    align-content: center;   
+    align-content: center;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
 }

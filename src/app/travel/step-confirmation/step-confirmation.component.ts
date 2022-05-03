@@ -1,18 +1,16 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { Facture } from 'src/app/core/models';
 
 @Component({
   selector: 'app-step-confirmation',
   templateUrl: './step-confirmation.component.html',
   styleUrls: ['./step-confirmation.component.scss']
 })
-export class StepConfirmationComponent implements OnInit {
+export class StepConfirmationComponent  {
 
   @Output() reset = new EventEmitter();
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  facture: Facture;
 
   onResetStepper() {
     this.reset.emit();

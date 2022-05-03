@@ -56,10 +56,9 @@
     </ng-container>
 
 </ng-container>
-
       <div class="button-item">
-        <button mat-flat-button color="primary"  matStepperPrevious (click)="paiementFormGroup.reset({})">Compléter mon panier</button>
-        <button mat-flat-button color="primary" type="submit" matStepperNext (click)="onSubmit()">Payer</button>
+        <button mat-flat-button color="primary" (click)="onCancelReservation()">Annuler ma réservation</button>
+        <button mat-flat-button color="primary" type="submit" (click)="onSubmit()">Payer</button>
       </div>
   </form>
 </div>

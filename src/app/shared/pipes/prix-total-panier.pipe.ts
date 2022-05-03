@@ -10,7 +10,7 @@ export class PrixTotalPanierPipe implements PipeTransform {
 
   constructor(private currencyPipe: CurrencyPipe) {}
 
-  transform(items: List<ItemPanier>, ...args: unknown[]): unknown {
+  transform(items: List<ItemPanier>): string | null {
     return  this.currencyPipe.transform(
       items.reduce((total:number, item) => total + item.prixTotal, 0),
       'EUR');

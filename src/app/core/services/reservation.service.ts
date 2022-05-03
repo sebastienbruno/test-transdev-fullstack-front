@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { List } from 'immutable';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { Observable, switchMap, take } from 'rxjs';
 import { CreateReservation, Reservation } from '../models';
 import { ApiService } from './api.service';
 import { PanierService } from './panier.service';
@@ -21,10 +21,15 @@ export class ReservationService {
       clientId: this._clientId
     }
     return this.panierService.itemsPanier$.pipe(
+      take(1),
         switchMap((items) => {
           createReseravation.trajetsId = items.map((item) => item.trajet.trajetId);
           return this.apiService.post('/reservations', createReseravation);
         }))
   }
   
+  public delete(reservation: Reservation): Observable<string> {
+    return this.apiService.delete(`/reservations/${reservation.reservationId}`);
+  }
+
 }

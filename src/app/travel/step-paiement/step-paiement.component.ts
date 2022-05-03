@@ -1,11 +1,12 @@
 
 import { PAIEMENT_PAYPAL, PAIEMENT_CARTE_BANCAIRE, PATTERN_CARTE_BANCAIRE } from '../../core/constants';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { EventEmitter, Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
-import * as _moment from 'moment';
 import { Subscription } from 'rxjs';
+import { PaiementService, ReservationService } from 'src/app/core/services';
+import { Facture, MoyenPaiement, Reservation } from 'src/app/core/models';
 
 export const MY_FORMATS = {
   parse: {
@@ -29,6 +30,12 @@ export const MY_FORMATS = {
   ],})
 export class StepPaiementComponent implements OnInit, OnDestroy {
 
+  @Output()
+  onNextStep = new EventEmitter();
+  
+  @Output()
+  onPreviousStep = new EventEmitter();
+
   subscriptions: Subscription = new Subscription();
 
   PAYPAL = PAIEMENT_PAYPAL;
@@ -40,8 +47,12 @@ export class StepPaiementComponent implements OnInit, OnDestroy {
     {name:this.PAYPAL, libelle: "Paypal"}]
 
   errors: string[];
+
+  reservation: Reservation;
   
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private _formBuilder: FormBuilder,
+    private reservationService: ReservationService,
+    private paiementService: PaiementService) {}
 
   ngOnInit(): void {
     this.paiementFormGroup = this._formBuilder.group({
@@ -52,7 +63,6 @@ export class StepPaiementComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(this.paiementFormGroup.get('typeMoyenPaiement')?.valueChanges.subscribe(value => {
-      console.log('On change', value);
       if (value === PAIEMENT_CARTE_BANCAIRE) {
         this.paiementFormGroup.get('numeroCarte')?.setValidators([
           Validators.pattern(PATTERN_CARTE_BANCAIRE),
@@ -76,17 +86,28 @@ export class StepPaiementComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(){
-    console.log(this.paiementFormGroup.status);
-    console.log(this.paiementFormGroup);
     if (this.paiementFormGroup?.controls['typeMoyenPaiement'].status === 'INVALID') {
-      console.log('error');
       this.errors = ["La sélection d'un moyen de paiement est obligatoire"]
     }
     else {
-      console.log("Paiement en cours");
-      console.log(this.paiementFormGroup.value);
-      console.log("Paiement accepté");
+          const moyenPaiement: MoyenPaiement = this.paiementFormGroup.get('typeMoyenPaiement')?.value === this.CARTE_BANCAIRE ?
+          {cardNumber: this.paiementFormGroup.get('numeroCarte')?.value,
+          expirationDate: this.paiementFormGroup.get('dateExpiration')?.value} :
+          {email: this.paiementFormGroup.get('email')?.value}
+          this.paiementService.payReservation(this.reservation.reservationId, moyenPaiement).subscribe(
+          (facture: Facture) => {
+            this.onNextStep.emit(facture);
+            this.paiementFormGroup.reset({});
+          }
+        )
     }
+  }
+
+  onCancelReservation(): void {
+    this.reservationService.delete(this.reservation).subscribe(() => {
+      this.onPreviousStep.emit();
+      this.paiementFormGroup.reset({});
+    })
   }
 
 

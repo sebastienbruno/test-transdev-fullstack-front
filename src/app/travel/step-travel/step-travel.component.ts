@@ -34,7 +34,8 @@ export class StepTravelComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.panierService.itemsPanier$.subscribe(items => {
       this.disableValiderPanierButton = items.isEmpty();
     }));
-    this.subscriptions.add(this.trajetService.getAllBus().subscribe(busList => this.busList = busList));
+    this.subscriptions.add(this.trajetService.getAllBus().subscribe(
+      busList => this.busList = busList));
   }
 
   public onAddTrajet(trajet: Trajet) {
@@ -42,21 +43,21 @@ export class StepTravelComponent implements OnInit, OnDestroy {
   }
 
   public onChangeBusSelection(numeroBus: number): void {
-    console.log("numeroBus change : ", numeroBus);
-    this.subscriptions.add(this.trajetService.getAllByNumeroBus(numeroBus).subscribe(
-      (trajets: List<Trajet>) => {
-        console.log(trajets);
-        this.trajets = trajets
-      }));
+    this.subscriptions.add(
+        this.trajetService.getAllByNumeroBus(numeroBus).subscribe({
+          next: (trajets: List<Trajet>) => {
+            this.trajets = trajets;
+          }}));
   }
-
+  
   public onValidate(): void {
-    this.reservationService.create().subscribe(
+    this.disableValiderPanierButton = true;
+    this.subscriptions.add(this.reservationService.create().subscribe(
       (reservation: Reservation) => {
-        console.log("reservation confirmée", reservation.reservationId);
-        this.onNextStep.emit(reservation.reservationId);
+        this.onNextStep.emit(reservation);
+        this.panierService.reset();
       }
-    );    
+    ));    
   }
 
   ngOnDestroy(): void {
