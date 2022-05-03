@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { List } from 'immutable';
 import { Observable, switchMap, take } from 'rxjs';
-import { CreateReservation, Reservation } from '../models';
+import { CreateReservation, ItemPanier, Reservation } from '../models';
+import { BilletDto } from '../models/billet-dto.model';
 import { ApiService } from './api.service';
 import { PanierService } from './panier.service';
 
@@ -17,13 +18,18 @@ export class ReservationService {
 
   public create(): Observable<Reservation> {
     let createReseravation: CreateReservation = {
-      trajetsId: List<number>(),
+      billets: List<BilletDto>(),
       clientId: this._clientId
     }
     return this.panierService.itemsPanier$.pipe(
       take(1),
         switchMap((items) => {
-          createReseravation.trajetsId = items.map((item) => item.trajet.trajetId);
+          createReseravation.billets = items.map(item => {
+            return {
+              quantite: item.quantite,
+              trajetId: item.trajet.trajetId
+            }
+          });
           return this.apiService.post('/reservations', createReseravation);
         }))
   }
