@@ -8,7 +8,7 @@ Front-end : https://github.com/sebastienbruno/test-transdev-fullstack-front
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm install` then run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 Use the configuration file 'environment.ts' to configure the back-end url (example: http://localhost:8080)
 
 ## Code scaffolding
