@@ -1,6 +1,7 @@
 import { List } from "immutable";
+import { BilletDto } from "./billet-dto.model";
 
 export interface CreateReservation {
-    trajetsId: List<number>;
+    billets: List<BilletDto>;
     clientId: number;
 }
